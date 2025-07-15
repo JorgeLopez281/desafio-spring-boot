@@ -70,3 +70,169 @@ Se evaluará la solución en función de los siguientes criterios:
 - Uso adecuado de Java 17, Spring Boot 3.4.x, H2, JWT, OpenAPI y Swagger.
 - Claridad y completitud de la documentación.
 - **Puntos extras si la generación de la API se realizo mediante API First**
+
+## ----------------------
+## Informacion
+
+Para acceder a los recursos se debe crear un usuario con el API de **POST /app/auth/register** posterior se debe 
+generar el Token correspondiente con el API de **POST /app/auth/login** y enviarlo en el Header de las API's 
+de **/app/user** y **/app/task** en el caso de no hacerlo se generara un error.
+
+## Implementación
+
+Para ejecutar este proyecto, ejecuta el método principal de la clase main.
+
+## Unit tests
+
+Para ejecutar las pruebas unitarias se debe ejecutar la opcion "mvn clean verify" de Maven.
+
+## Api Reference
+
+#### Registrar un usuario para generar Token
+
+```http
+POST /app/auth/register
+```
+```json
+{
+  "userName": "string",
+  "password": "string",
+  "role": "string"
+}
+```
+
+#### Generar Token
+
+```http
+POST /app/auth/login
+```
+```json
+{
+  "userName": "string",
+  "password": "string"
+}
+```
+
+#### Validar que un Token esta funcionando Correctamente
+
+```http
+GET /app/auth/check-auth
+```
+
+#### Obtener una Task por Id
+
+```http
+GET /app/task/{id}
+```
+
+| Parámetro | Tipo     | Descripción                  |
+|:----------| :------- |:-----------------------------|
+| `id`      | `string` | **Requerido**. Id de la Task |
+
+#### Obtener un Usuario por Id
+
+```http
+GET /app/user/{id}
+```
+
+| Parámetro | Tipo     | Descripción                  |
+|:----------| :------- |:-----------------------------|
+| `id`      | `string` | **Requerido**. Id de la Task |
+
+#### Obtener un Usuario por Id
+
+```http
+PUT /app/user/{id}
+```
+```json
+{
+  "name": "string",
+  "email": "string"
+}
+```
+
+| Parámetro | Tipo     | Descripción                  |
+|:----------| :------- |:-----------------------------|
+| `id`      | `string` | **Requerido**. Id de la Task |
+
+#### Eliminar un Usuario por Id
+
+```http
+DELETE /app/user/{id}
+```
+| Parámetro | Tipo     | Descripción                  |
+|:----------| :------- |:-----------------------------|
+| `id`      | `string` | **Requerido**. Id de la Task |
+
+#### Obtener todos los usuarios de la DB
+
+```http
+GET /app/user
+```
+
+#### Crear un usuario en la DB
+
+```http
+POST /app/user
+```
+```json
+{
+  "name": "string",
+  "email": "string"
+}
+```
+
+## Pila Tecnológica
+
+**Cliente:** Swagger
+
+**Servidor:** Java, Spring Framework, Gradle, JUnit 5
+
+
+- Para acceder a Swagger, utiliza: [http://localhost:8090/swagger-ui/index.html](http://localhost:8090/swagger-ui/index.html) y
+- Para acceder a la base de datos, utiliza: [http://localhost:8090/h2-console/login.jsp](http://localhost:8090/h2-console/login.jsp) y utiliza el usuario **tecnova** y el password **tecnova**.
+- Para acceder a la documentacion API-Doc, utiliza: [http://localhost:8090/api-docs](http://localhost:8090/api-docs).
+
+En el paquete de recursos se encuentra el diagrama de clases.
+
+classDiagram
+
+    class AppUserEntity {
+        + id: String
+        + userName: String
+        + password: String
+        + role: RoleEntity
+    }
+
+    class RoleEntity {
+        + id: Integer
+        + name: RoleList
+    }
+
+    class TaskEntity {
+        + id: Long
+        + title:String 
+        + description: String 
+        + limitDate: LocalDate
+        + userEntity: UserEntity 
+        + taskStatusEntity: TaskStatusEntity
+    }
+
+    class TaskStatusEntity {
+        + id: Long
+        + description: String 
+        + taskList: List<TaskEntity>
+    }
+
+    class UserEntity {
+        + id: Long 
+        + name: String
+        + email: String
+        + taskList: List<TaskEntity> 
+    }
+
+![Diagrama de clases](/src/main/resources/schema.png)
+
+## Autor
+
+- Jorge Lopez
